@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% block title %} Рабочий стол {% endblock %}
+{% block page %}
+<div class="container">
+    <br/>
+    <table class="table table-inverse table-hover">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Тип</th>
+            <th>Поколение</th>
+            <th>Цвет</th>
+            <th>Пол</th>
+            <th>Способности</th>
+            <th>Статистика</th>
+            <th>Вес</th>
+            <th>Рост</th>
+            <th>Яйцо</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pokemon in pokemons %}
+        <tr>
+            <td>{{ pokemon.name }}</td>
+            <td>
+                {% for type in pokemon.types.all %}
+                {{ type }}
+                {% endfor %}
+            </td>
+
+            <td>{{ pokemon.generation }}</td>
+            <td>{{ pokemon.color }}</td>
+            <td>{{ pokemon.gender }}</td>
+            <td>
+                {% for ability in pokemon.abilities.all %}
+                {{ ability }}
+                {% endfor %}
+            </td>
+            <td>{{ pokemon.stats }}</td>
+            <td>{{ pokemon.weight }}</td>
+            <td>{{ pokemon.height }}</td>
+            <td>{{ pokemon.eggs }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br/>
+</div>
+
+{% endblock %}
