@@ -1,0 +1,154 @@
+{% extends 'main.html' %}
+{% block title %} Рабочий стол {% endblock %}
+{% block page %}
+
+
+<div class="container">
+    <br/>
+    <div class="d-flex justify-content-between">
+        <div>
+        </div>
+        <a href="{% url 'desktop' %}" class="btn btn-outline-success">Рабочий стол</a>
+    </div>
+    <h4 class="d-flex justify-content-center"> Покемон {{ pokemon.name }} </h4>
+    <br/>
+    <table class="table table-inverse table-hover">
+        <tbody>
+        <tr>
+            <th>ID:</th>
+            <th>{{ pokemon.id }}</th>
+        </tr>
+        <tr>
+            <th>Имя:</th>
+            <th>{{ pokemon.name }}</th>
+        </tr>
+        <tr>
+            <th>Тип:</th>
+            <th>
+                {% for type in pokemon.types.all %}
+                {{ type }}
+                {% endfor %}
+            </th>
+        </tr>
+        <tr>
+            <th>Способности:</th>
+            <th>
+                {% for ability in pokemon.abilities.all %}
+                {{ ability }}
+                {% endfor %}
+            </th>
+        </tr>
+        <tr>
+            <th>Вес:</th>
+            <th>{{ pokemon.weight }}</th>
+        </tr>
+        <tr>
+            <th>Рост:</th>
+            <th>{{ pokemon.height }}</th>
+        </tr>
+        <tr>
+            <th>Яйцо:</th>
+            <th>{{ pokemon.eggs }}</th>
+        </tr>
+        <tr>
+            <th>Поколение:</th>
+            <th>{{ pokemon.generation }}</th>
+        </tr>
+        <tr>
+            <th>Пол:</th>
+            <th>{{ pokemon.gender }}</th>
+        </tr>
+        <tr>
+            <th>Цвет:</th>
+            <th>{{ pokemon.color }}</th>
+        </tr>
+        <tr>
+            <th>Скорость:</th>
+            <th>{{ pokemon.stats.speed }}</th>
+        </tr>
+        <tr>
+            <th>Атака:</th>
+            <th>{{ pokemon.stats.attack }}</th>
+        </tr>
+        <tr>
+            <th>Спец. атака:</th>
+            <th>{{ pokemon.stats.special_attack }}</th>
+        </tr>
+        <tr>
+            <th>Защита:</th>
+            <th>{{ pokemon.stats.defense }}</th>
+        </tr>
+
+        <tr>
+            <th>Спец. защита:</th>
+            <th>{{ pokemon.stats.special_defense }}</th>
+        </tr>
+
+        <tr>
+            <th>Спец. защита:</th>
+            <th>{{ pokemon.stats.hp }}</th>
+        </tr>
+        <tr>
+            <th>Общая статистика:</th>
+            <th>{{ pokemon.stats }}</th>
+        </tr>
+
+        <tr>
+            <th>Спрайты:</th>
+            <th>
+
+                {% with pokemon.sprites.back_female as sprite_bf %}
+                {% if not sprite_bf == None %}
+                <a href="{{ sprite_bf }}" ><img src="{{ sprite_bf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_shiny_female as sprite_bsf %}
+                {% if not sprite_bsf == None %}
+                <a href="{{ sprite_bsf }}" ><img src="{{ sprite_bsf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_default as sprite_bd %}
+                {% if not sprite_bd == None %}
+                <a href="{{ sprite_bd }}" ><img src="{{ sprite_bd }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_shiny as sprite_bs %}
+                {% if not sprite_bs == None %}
+                <a href="{{ sprite_bs }}" ><img src="{{ sprite_bs }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_female as sprite_ff %}
+                {% if not sprite_ff == None %}
+                <a href="{{ sprite_ff }}" ><img src="{{ sprite_ff }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_shiny_female as sprite_fsf %}
+                {% if not sprite_fsf == None %}
+                <a href="{{ sprite_fsf }}" ><img src="{{ sprite_fsf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_default as sprite_fd %}
+                {% if not sprite_fd == None %}
+                <a href="{{ sprite_fd }}" ><img src="{{ sprite_fd }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_shiny as sprite_fs %}
+                {% if not sprite_fs == None %}
+                <a href="{{ sprite_fs }}" ><img src="{{ sprite_fs }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

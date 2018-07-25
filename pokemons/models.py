@@ -1,6 +1,21 @@
 from django.db import models
 
 
+class Sprites(models.Model):
+    back_female = models.URLField(blank=True, null=True)
+    back_shiny_female = models.URLField(blank=True, null=True)
+    back_default = models.URLField(blank=True, null=True)
+    front_female = models.URLField(blank=True, null=True)
+    front_shiny_female = models.URLField(blank=True, null=True)
+    back_shiny = models.URLField(blank=True, null=True)
+    front_default = models.URLField(blank=True, null=True)
+    front_shiny = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Спрайты"
+        verbose_name_plural = "Спрайты"
+
+
 class Type(models.Model):
     name = models.CharField(max_length=20, verbose_name="Тип покемона", unique=True)
 
@@ -10,17 +25,6 @@ class Type(models.Model):
     class Meta:
         verbose_name = "Тип"
         verbose_name_plural = "Типы"
-
-
-class Ability(models.Model):
-    name = models.CharField(max_length=20, verbose_name="Способность покемона", unique=True)
-
-    def __str__(self):
-        return self.name.__repr__()
-
-    class Meta:
-        verbose_name = "Способность"
-        verbose_name_plural = "Способности"
 
 
 class Statistic(models.Model):
@@ -40,19 +44,15 @@ class Statistic(models.Model):
         verbose_name_plural = "Статистика"
 
 
-class Sprites(models.Model):
-    back_female = models.URLField(blank=True,null=True)
-    back_shiny_female = models.URLField(blank=True,null=True)
-    back_default = models.URLField(blank=True,null=True)
-    front_female = models.URLField(blank=True,null=True)
-    front_shiny_femail = models.URLField(blank=True,null=True)
-    back_shiny = models.URLField(blank=True,null=True)
-    front_default = models.URLField(blank=True,null=True)
-    front_shiny = models.URLField(blank=True,null=True)
+class Ability(models.Model):
+    name = models.CharField(max_length=20, verbose_name="Способность покемона", unique=True)
+
+    def __str__(self):
+        return self.name.__str__()
 
     class Meta:
-        verbose_name = "Спрайты"
-        verbose_name_plural = "Спрайты"
+        verbose_name = "Способность"
+        verbose_name_plural = "Способности"
 
 
 class Pokemon(models.Model):

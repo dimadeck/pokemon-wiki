@@ -21,7 +21,7 @@
         <tbody>
         {% for pokemon in pokemons %}
         <tr>
-            <td>{{ pokemon.name }}</td>
+            <td><a href="{% url 'details' pokemon.id %}" class="btn btn-outline-success">{{ pokemon.name }}</a></td>
             <td>
                 {% for type in pokemon.types.all %}
                 {{ type }}
