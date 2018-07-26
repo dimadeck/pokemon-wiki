@@ -1,11 +1,14 @@
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
 from pokemons.forms import StatisticForm, SpriteForm, AbilityForm, TypeForm
 from pokemons.functions import set_dict
+from pokemon_info import PokemonInfo
 
 PAGINATION_PAGES = 5
 
@@ -22,12 +25,12 @@ class Desktop(generic.ListView):
         paginator = Paginator(queryset, PAGINATION_PAGES)
         page = self.request.GET.get('page')
         try:
-            analyses = paginator.page(page)
+            pokemons = paginator.page(page)
         except PageNotAnInteger:
-            analyses = paginator.page(1)
+            pokemons = paginator.page(1)
         except EmptyPage:
-            analyses = paginator.page(paginator.num_pages)
-        return analyses
+            pokemons = paginator.page(paginator.num_pages)
+        return pokemons
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super(Desktop, self).get_context_data()
@@ -164,3 +167,36 @@ class SearchView(generic.ListView):
         context['last_query'] = query
         context['pokemon_list'] = self.get_queryset()
         return context
+
+
+class PokemonAddFromAPI(generic.RedirectView):
+    def get(self, request, *args, **kwargs):
+        try:
+            pok = PokemonInfo(kwargs['pk'])
+            pok.collect_info()
+            pd = pok.dictionary
+            stat_obj = Statistic.objects.create(**set_dict(pd['pok_stats'], StatisticForm.Meta.fields))
+            stat_obj.save()
+
+            sprite_obj = Sprites.objects.create(**set_dict(pd['pok_sprites'], SpriteForm.Meta.fields))
+            sprite_obj.save()
+
+            other_fields = ('pok_name', 'pok_weight', 'pok_height', 'pok_color', 'pok_generation', 'pok_eggs', 'pok_gender')
+            fields = ('name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender')
+            obj = Pokemon.objects.create(stats=stat_obj, sprites=sprite_obj, **set_dict(pd, fields, other_fields))
+            obj.stats = stat_obj
+            obj.sprites = sprite_obj
+            obj.save()
+
+            for type in pd['pok_types']:
+                type_obj, created = Type.objects.get_or_create(ty_name=type)
+                obj.types.add(type_obj)
+                obj.save()
+
+            for ability in pd['pok_abilities']:
+                ability_obj, created = Ability.objects.get_or_create(ab_name=ability)
+                obj.abilities.add(ability_obj)
+                obj.save()
+        except:
+            raise PermissionDenied
+        return redirect(reverse_lazy('desktop'))
