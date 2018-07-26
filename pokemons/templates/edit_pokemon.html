@@ -14,14 +14,10 @@
             <div class="col-3">
                 <div class="row justify-content-center">Характеристики</div>
                 {% bootstrap_form form2 %}
-                <div class="row justify-content-center">
-                    <div class="col">
-                        <button type="submit" class="btn btn-outline-success">Обновить</button>
-                    </div>
-                    <div class="col">
-                        <a href="{% url 'details' pokemon.id %}" class="btn btn-outline-danger">Отмена</a>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-outline-success"><img src="https://dataforceff.com/images/yes.png"
+                                                                           width="70" height="70"></button>
+                <a href="{% url 'details' pokemon.id %}" class="btn btn-outline-danger"><img
+                        src="https://francy-annu.com/img/icons/abort.png" width="70" height="70"></a>
             </div>
             <div class="col-3">
                 <div class="row justify-content-center">Спрайты</div>

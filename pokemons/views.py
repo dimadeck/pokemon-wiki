@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -5,12 +7,32 @@ from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
 from pokemons.forms import StatisticForm, SpriteForm, AbilityForm, TypeForm
 from pokemons.functions import set_dict
 
+PAGINATION_PAGES = 5
+
 
 class Desktop(generic.ListView):
     template_name = "desktop.html"
     model = Pokemon
     context_object_name = "pokemons"
     queryset = Pokemon.objects.all()
+
+    def get_queryset(self):
+        queryset = super(Desktop, self).get_queryset()
+
+        paginator = Paginator(queryset, PAGINATION_PAGES)
+        page = self.request.GET.get('page')
+        try:
+            analyses = paginator.page(page)
+        except PageNotAnInteger:
+            analyses = paginator.page(1)
+        except EmptyPage:
+            analyses = paginator.page(paginator.num_pages)
+        return analyses
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(Desktop, self).get_context_data()
+        context['pokemons'] = self.get_queryset()
+        return context
 
 
 class Details(generic.DetailView):
@@ -117,3 +139,28 @@ class DeletePokemon(generic.DeleteView):
     def get_object(self, queryset=None):
         obj = get_object_or_404(Pokemon, pk=self.kwargs['pk'])
         return obj
+
+
+class SearchView(generic.ListView):
+    template_name = "search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        founded = Pokemon.objects.filter(Q(name__icontains=query))
+
+        paginator = Paginator(founded, PAGINATION_PAGES)
+        page = self.request.GET.get('page')
+        try:
+            founded = paginator.page(page)
+        except PageNotAnInteger:
+            founded = paginator.page(1)
+        except EmptyPage:
+            founded = paginator.page(paginator.num_pages)
+        return founded
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(SearchView, self).get_context_data()
+        query = self.request.GET.get('q')
+        context['last_query'] = query
+        context['pokemon_list'] = self.get_queryset()
+        return context

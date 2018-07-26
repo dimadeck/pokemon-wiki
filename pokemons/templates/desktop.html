@@ -1,52 +1,74 @@
 {% extends 'main.html' %}
 {% block title %} Рабочий стол {% endblock %}
 {% block page %}
-<div class="container">
-    <br/>
-    <div><a href="{% url 'new_pokemon' %}" class="btn btn-outline-success">Добавить покемона</a></div>
+<br/>
+<div class="btn btn-outline-success"><a href="{% url 'new_pokemon' %}">
+    <img src="https://www.pokemontimes.it/home/wp-content/uploads/2017/01/uovo_pokemon_sprite_pokemontimes-it-696x856.png"
+         width="70" height="70"></a></div>
+<table class="table table-inverse table-hover">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Имя</th>
+        <th>Тип</th>
+        <th>Поколение</th>
+        <th>Цвет</th>
+        <th>Пол</th>
+        <th>Силы</th>
+        <th>Статы</th>
+        <th>Вес</th>
+        <th>Рост</th>
+        <th>Яйцо</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for pokemon in pokemons %}
 
-    <table class="table table-inverse table-hover">
-        <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Тип</th>
-            <th>Поколение</th>
-            <th>Цвет</th>
-            <th>Пол</th>
-            <th>Способности</th>
-            <th>Статистика</th>
-            <th>Вес</th>
-            <th>Рост</th>
-            <th>Яйцо</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for pokemon in pokemons %}
-        <tr>
-            <td><a href="{% url 'details' pokemon.id %}" class="btn btn-outline-success">{{ pokemon.name }}</a></td>
-            <td>
-                {% for type in pokemon.types.all %}
-                {{ type }}
-                {% endfor %}
-            </td>
+    <tr>
+        <td><a href="{% url 'details' pokemon.id %}" class="btn btn-outline-info"><img
+                src="https://cdn2.scratch.mit.edu/get_image/gallery/3473967_200x130.png" width="30" height="30"></a>
+        </td>
+        <td>{{ pokemon.name }}</td>
+        <td>
+            {% for type in pokemon.types.all %}
+            {{ type }}
+            {% endfor %}
+        </td>
+        <td>{{ pokemon.generation }}</td>
+        <td>{{ pokemon.color }}</td>
+        <td>{{ pokemon.gender }}</td>
+        <td>
+            {% for ability in pokemon.abilities.all %}
+            {{ ability }}
+            {% endfor %}
+        </td>
+        <td>{{ pokemon.stats }}</td>
+        <td>{{ pokemon.weight }}</td>
+        <td>{{ pokemon.height }}</td>
+        <td>{{ pokemon.eggs }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="pagination">
 
-            <td>{{ pokemon.generation }}</td>
-            <td>{{ pokemon.color }}</td>
-            <td>{{ pokemon.gender }}</td>
-            <td>
-                {% for ability in pokemon.abilities.all %}
-                {{ ability }}
-                {% endfor %}
-            </td>
-            <td>{{ pokemon.stats }}</td>
-            <td>{{ pokemon.weight }}</td>
-            <td>{{ pokemon.height }}</td>
-            <td>{{ pokemon.eggs }}</td>
-        </tr>
+        {% if pokemons.has_previous %}
+        <a href="?page={{ pokemons.previous_page_number }}">←</a>
+        {% endif %}
+
+        {% for num in pokemons.paginator.page_range %}
+        {% if num == pokemons.number %}
+        <span class="current"><b>{{ num }}</b></span>
+        {% else %}
+        <a href="?page={{ num }}"> {{ num }}</a>
+        {% endif %}
         {% endfor %}
-        </tbody>
-    </table>
-    <br/>
-</div>
 
+        {% if pokemons.has_next %}
+        <a href="?page={{ pokemons.next_page_number }}">→</a>
+        {% endif %}
+
+    </div>
+
+<br/>
 {% endblock %}

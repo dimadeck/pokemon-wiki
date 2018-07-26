@@ -7,15 +7,71 @@
     <br/>
     <div class="d-flex justify-content-between">
         <div>
-            <a href="{% url 'edit_pokemon' pokemon.id %}" class="btn btn-outline-success">Изменить</a>
-            <a href="{% url 'delete_pokemon' pokemon.id %}" class="btn btn-outline-danger">Удалить</a>
+            <a href="{% url 'edit_pokemon' pokemon.id %}" class="btn btn-outline-info"><img
+                    src="https://www.xynta.com/assets/img/webhosting/icon-controlpanel.png" width="70" height="70"></a>
         </div>
-        <a href="{% url 'desktop' %}" class="btn btn-outline-success">Рабочий стол</a>
+        <a href="{% url 'delete_pokemon' pokemon.id %}" class="btn btn-outline-danger"><img
+                src="https://uploads.goodbits.io/uploads/link/thumbnail/4086881/50-512.png" width="70" height="70"></a>
     </div>
     <h4 class="d-flex justify-content-center"> Покемон {{ pokemon.name }} </h4>
     <br/>
     <table class="table table-inverse table-hover">
         <tbody>
+        <tr>
+            <th>Спрайты:</th>
+            <th>
+
+                {% with pokemon.sprites.back_female as sprite_bf %}
+                {% if not sprite_bf == None %}
+                <a href="{{ sprite_bf }}"><img src="{{ sprite_bf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_shiny_female as sprite_bsf %}
+                {% if not sprite_bsf == None %}
+                <a href="{{ sprite_bsf }}"><img src="{{ sprite_bsf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_default as sprite_bd %}
+                {% if not sprite_bd == None %}
+                <a href="{{ sprite_bd }}"><img src="{{ sprite_bd }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.back_shiny as sprite_bs %}
+                {% if not sprite_bs == None %}
+                <a href="{{ sprite_bs }}"><img src="{{ sprite_bs }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_female as sprite_ff %}
+                {% if not sprite_ff == None %}
+                <a href="{{ sprite_ff }}"><img src="{{ sprite_ff }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_shiny_female as sprite_fsf %}
+                {% if not sprite_fsf == None %}
+                <a href="{{ sprite_fsf }}"><img src="{{ sprite_fsf }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_default as sprite_fd %}
+                {% if not sprite_fd == None %}
+                <a href="{{ sprite_fd }}"><img src="{{ sprite_fd }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+                {% with pokemon.sprites.front_shiny as sprite_fs %}
+                {% if not sprite_fs == None %}
+                <a href="{{ sprite_fs }}"><img src="{{ sprite_fs }}" width="40" height="40"></a>
+                {% endif %}
+                {% endwith %}
+
+            </th>
+        </tr>
+
         <tr>
             <th>ID:</th>
             <th>{{ pokemon.id }}</th>
@@ -95,60 +151,6 @@
             <th>{{ pokemon.stats }}</th>
         </tr>
 
-        <tr>
-            <th>Спрайты:</th>
-            <th>
-
-                {% with pokemon.sprites.back_female as sprite_bf %}
-                {% if not sprite_bf == None %}
-                <a href="{{ sprite_bf }}"><img src="{{ sprite_bf }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.back_shiny_female as sprite_bsf %}
-                {% if not sprite_bsf == None %}
-                <a href="{{ sprite_bsf }}"><img src="{{ sprite_bsf }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.back_default as sprite_bd %}
-                {% if not sprite_bd == None %}
-                <a href="{{ sprite_bd }}"><img src="{{ sprite_bd }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.back_shiny as sprite_bs %}
-                {% if not sprite_bs == None %}
-                <a href="{{ sprite_bs }}"><img src="{{ sprite_bs }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.front_female as sprite_ff %}
-                {% if not sprite_ff == None %}
-                <a href="{{ sprite_ff }}"><img src="{{ sprite_ff }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.front_shiny_female as sprite_fsf %}
-                {% if not sprite_fsf == None %}
-                <a href="{{ sprite_fsf }}"><img src="{{ sprite_fsf }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.front_default as sprite_fd %}
-                {% if not sprite_fd == None %}
-                <a href="{{ sprite_fd }}"><img src="{{ sprite_fd }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-                {% with pokemon.sprites.front_shiny as sprite_fs %}
-                {% if not sprite_fs == None %}
-                <a href="{{ sprite_fs }}"><img src="{{ sprite_fs }}" width="40" height="40"></a>
-                {% endif %}
-                {% endwith %}
-
-            </th>
-        </tr>
         </tbody>
     </table>
 

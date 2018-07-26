@@ -8,4 +8,5 @@ urlpatterns = [
     path('desktop/new_pokemon', views.NewPokemon.as_view(), name='new_pokemon'),
     path('desktop/<int:pk>/edit_pokemon', views.EditPokemon.as_view(), name='edit_pokemon'),
     path('desktop/<int:pk>/delete', views.DeletePokemon.as_view(), name='delete_pokemon'),
+    path('search', views.SearchView.as_view(), name='search'),
 ]

@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Поиск {% endblock %}
+{% block page %}
+<div class="container">
+    <br/>
+    <div class="d-flex justify-content-center">
+        <h1>Поиск по запросу: "{{last_query}}"</h1></div>
+    <br/>
+    <div class="pagination">
+
+        {% if pokemon_list.has_previous %}
+        <a href="?q={{last_query}}&page={{ pokemon_list.previous_page_number }}">←</a>
+        {% endif %}
+
+        {% for num in pokemon_list.paginator.page_range %}
+        {% if num == pokemon_list.number %}
+        <span class="current"><b>{{ num }}</b></span>
+        {% else %}
+        <a href="?q={{last_query}}&page={{ num }}"> {{ num }}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if pokemon_list.has_next %}
+        <a href="?q={{last_query}}&page={{ pokemon_list.next_page_number }}">→</a>
+        {% endif %}
+
+    </div>
+
+    {% if pokemon_list %}
+    <table class="table table-inverse table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Имя</th>
+            <th>Тип</th>
+            <th>Поколение</th>
+            <th>Цвет</th>
+            <th>Пол</th>
+            <th>Силы</th>
+            <th>Статы</th>
+            <th>Вес</th>
+            <th>Рост</th>
+            <th>Яйцо</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pokemon in pokemon_list %}
+        <tr>
+            <td><a href="{% url 'details' pokemon.id %}"><img
+                    src="https://cdn2.scratch.mit.edu/get_image/gallery/3473967_200x130.png" width="30" height="30"></a>
+            </td>
+            <td>{{ pokemon.name }}</td>
+            <td>
+                {% for type in pokemon.types.all %}
+                {{ type }}
+                {% endfor %}
+            </td>
+            <td>{{ pokemon.generation }}</td>
+            <td>{{ pokemon.color }}</td>
+            <td>{{ pokemon.gender }}</td>
+            <td>
+                {% for ability in pokemon.abilities.all %}
+                {{ ability }}
+                {% endfor %}
+            </td>
+            <td>{{ pokemon.stats }}</td>
+            <td>{{ pokemon.weight }}</td>
+            <td>{{ pokemon.height }}</td>
+            <td>{{ pokemon.eggs }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Не найдено публикаций по вашему запросу<br>Попробуйте повторить запрос с другой формулировкой</p>
+    {% endif %}
+</div>
+{% endblock %}
