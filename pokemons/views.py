@@ -82,12 +82,6 @@ class NewPokemon(generic.CreateView):
         obj.abilities.add(ability_obj)
         obj.save()
 
-        # for type in form.data['types']:
-        #     obj.types.add(type)
-        #     obj.save()
-        # for ability in form.data['abilities']:
-        #     obj.abilities.add(ability)
-
         return redirect(reverse_lazy('desktop'))
 
 
@@ -130,3 +124,13 @@ class EditPokemon(generic.UpdateView):
 
         obj.save()
         return redirect(reverse_lazy('desktop'))
+
+
+class DeletePokemon(generic.DeleteView):
+    template_name = "delete.html"
+    model = Pokemon
+    success_url = reverse_lazy('desktop')
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Pokemon, pk=self.kwargs['pk'])
+        return obj
