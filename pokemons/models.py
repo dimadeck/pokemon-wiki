@@ -17,7 +17,7 @@ class Sprites(models.Model):
 
 
 class Type(models.Model):
-    name = models.CharField(max_length=20, verbose_name="Тип покемона", unique=True)
+    ty_name = models.CharField(max_length=20, verbose_name="Тип покемона", unique=True)
 
     def __str__(self):
         return self.name
@@ -45,7 +45,7 @@ class Statistic(models.Model):
 
 
 class Ability(models.Model):
-    name = models.CharField(max_length=20, verbose_name="Способность покемона", unique=True)
+    ab_name = models.CharField(max_length=20, verbose_name="Способность покемона", unique=True)
 
     def __str__(self):
         return self.name.__str__()
@@ -63,8 +63,8 @@ class Pokemon(models.Model):
     generation = models.CharField(max_length=20, verbose_name="Поколение покемона")
     eggs = models.CharField(max_length=20, verbose_name="Яйцо покемона")
     gender = models.CharField(max_length=20, verbose_name="Пол покемона")
-    types = models.ManyToManyField(Type)
-    abilities = models.ManyToManyField(Ability)
+    types = models.ManyToManyField(Type, null=True)
+    abilities = models.ManyToManyField(Ability, null=True)
     stats = models.OneToOneField(Statistic, on_delete=models.CASCADE)
     sprites = models.OneToOneField(Sprites, on_delete=models.CASCADE, null=True)
 

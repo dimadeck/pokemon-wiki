@@ -1,5 +1,17 @@
 from django import forms
-from pokemons.models import Pokemon, Statistic, Sprites
+from pokemons.models import Pokemon, Statistic, Sprites, Ability, Type
+
+
+class AbilityForm(forms.ModelForm):
+    class Meta:
+        model = Ability
+        fields = ('ab_name',)
+
+
+class TypeForm(forms.ModelForm):
+    class Meta:
+        model = Type
+        fields = ('ty_name',)
 
 
 class PokemonForm(forms.ModelForm):

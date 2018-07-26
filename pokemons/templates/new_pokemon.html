@@ -5,9 +5,34 @@
 <h2>Новый покемон</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {% bootstrap_form form %}
-    {% bootstrap_form form2 %}
-    {% bootstrap_form form3 %}
-    <input type="submit" value="Создать">
+    <div class="container">
+        <div class="row justify-content-center">
+
+
+            <div class="col-3">
+                <div class="row justify-content-center">Описание</div>
+                {% bootstrap_form form %}
+                {% bootstrap_form type_form %}
+            </div>
+            <div class="col-3">
+                <div class="row justify-content-center">Характеристики</div>
+                {% bootstrap_form form2 %}
+                {% bootstrap_form ability_form %}
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <input class="btn btn-outline-success" type="submit" value="Создать"></div>
+                    <div class="col">
+                        <a href="{% url 'desktop' %}" class="btn btn-outline-danger">Отмена</a></div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row justify-content-center">Спрайты</div>
+                {% bootstrap_form form3 %}
+            </div>
+        </div>
+
+    </div>
+
 </form>
+
 {% endblock %}

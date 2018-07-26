@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from pokemons.models import Pokemon, Statistic, Sprites
-from pokemons.forms import StatisticForm, SpriteForm
+from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
+from pokemons.forms import StatisticForm, SpriteForm, AbilityForm, TypeForm
 
 
 class Desktop(generic.ListView):
@@ -39,17 +39,14 @@ class NewPokemon(generic.CreateView):
     template_name = "new_pokemon.html"
     model = Pokemon
     fields = (
-        'name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender', 'types',
-        'abilities')
+        'name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender')  # , 'types', 'abilities')
 
     def get_context_data(self, **kwargs):
         context = super(NewPokemon, self).get_context_data(**kwargs)
-        if 'form' not in context:
-            context['form'] = self.form_class()
-        if 'form2' not in context:
-            context['form2'] = StatisticForm
-        if 'form3' not in context:
-            context['form3'] = SpriteForm
+        context['form2'] = StatisticForm
+        context['form3'] = SpriteForm
+        context['ability_form'] = AbilityForm
+        context['type_form'] = TypeForm
         return context
 
     def form_valid(self, form):
@@ -76,13 +73,70 @@ class NewPokemon(generic.CreateView):
 
         obj.stats = stat_obj
         obj.sprites = sprite_obj
+
         obj.save()
 
-        for type in form.data['types']:
-            obj.types.add(type)
-            obj.save()
-        for ability in form.data['abilities']:
-            obj.abilities.add(ability)
+        if form.data['ty_name'] != '':
+            try:
+                Type.objects.create(ty_name=form.data['ty_name'])
+            except:
+                pass
+            obj.types.add(Type.objects.filter(ty_name=form.data['ty_name']))
             obj.save()
 
+        if form.data['ab_name'] != '':
+            try:
+                Ability.objects.create(ab_name=form.data['ab_name'])
+            except:
+                pass
+            obj.abilities.add(Ability.objects.filter(ab_name=form.data['ab_name']))
+            obj.save()
+
+        # for type in form.data['types']:
+        #     obj.types.add(type)
+        #     obj.save()
+        # for ability in form.data['abilities']:
+        #     obj.abilities.add(ability)
+
+        return redirect(reverse_lazy('desktop'))
+
+
+class EditPokemon(generic.UpdateView):
+    template_name = "edit_pokemon.html"
+    model = Pokemon
+    fields = ('name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender', 'types', 'abilities')
+    success_url = reverse_lazy('desktop')
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Pokemon, pk=self.kwargs['pk'])
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(EditPokemon, self).get_context_data(**kwargs)
+        context['form2'] = StatisticForm(instance=get_object_or_404(Statistic, pk=self.kwargs['pk']))
+        context['form3'] = SpriteForm(instance=get_object_or_404(Sprites, pk=self.kwargs['pk']))
+        return context
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+
+        Statistic.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
+            speed=form.data['speed'],
+            attack=form.data['attack'],
+            special_attack=form.data['special_attack'],
+            defense=form.data['defense'],
+            special_defense=form.data['special_defense'],
+            hp=form.data['hp'])
+
+        Sprites.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
+            back_female=form.data['back_female'],
+            back_shiny_female=form.data['back_shiny_female'],
+            back_default=form.data['back_default'],
+            back_shiny=form.data['back_shiny'],
+            front_female=form.data['front_female'],
+            front_shiny_female=form.data['front_shiny_female'],
+            front_default=form.data['front_default'],
+            front_shiny=form.data['front_shiny'])
+
+        obj.save()
         return redirect(reverse_lazy('desktop'))
