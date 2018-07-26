@@ -63,8 +63,8 @@ class Pokemon(models.Model):
     generation = models.CharField(max_length=20, verbose_name="Поколение покемона")
     eggs = models.CharField(max_length=20, verbose_name="Яйцо покемона")
     gender = models.CharField(max_length=20, verbose_name="Пол покемона")
-    types = models.ManyToManyField(Type, null=True)
-    abilities = models.ManyToManyField(Ability, null=True)
+    types = models.ManyToManyField(Type)
+    abilities = models.ManyToManyField(Ability)
     stats = models.OneToOneField(Statistic, on_delete=models.CASCADE)
     sprites = models.OneToOneField(Sprites, on_delete=models.CASCADE, null=True)
 

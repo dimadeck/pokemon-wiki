@@ -23,7 +23,7 @@ class Details(generic.DetailView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super(Details, self).get_context_data()
-        context['stats'] = get_object_or_404(Statistic, pk=self.kwargs['pk'])
+        context['stats'] = get_object_or_404(Statistic, pk=self.get_object().stats.id)
         return context
 
 
@@ -84,16 +84,16 @@ class EditPokemon(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(EditPokemon, self).get_context_data(**kwargs)
-        context['form2'] = StatisticForm(instance=get_object_or_404(Statistic, pk=self.kwargs['pk']))
-        context['form3'] = SpriteForm(instance=get_object_or_404(Sprites, pk=self.kwargs['pk']))
+        context['form2'] = StatisticForm(instance=get_object_or_404(Statistic, pk=self.get_object().stats.id))
+        context['form3'] = SpriteForm(instance=get_object_or_404(Sprites, pk=self.get_object().sprites.id))
         return context
 
     def form_valid(self, form):
         obj = form.save(commit=False)
 
-        Statistic.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
+        Statistic.objects.select_for_update().filter(pk=self.get_object().stats.id).update(
             **set_dict(form.data, StatisticForm.Meta.fields))
-        Sprites.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
+        Sprites.objects.select_for_update().filter(pk=self.get_object().sprites.id).update(
             **set_dict(form.data, SpriteForm.Meta.fields))
 
         obj.abilities.clear()
