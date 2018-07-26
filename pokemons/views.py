@@ -71,26 +71,16 @@ class NewPokemon(generic.CreateView):
             front_shiny=form.data['front_shiny'])
         sprite_obj.save()
 
+        type_obj, created = Type.objects.get_or_create(ty_name=form.data['ty_name'])
+        ability_obj, created = Ability.objects.get_or_create(ab_name=form.data['ab_name'])
+
         obj.stats = stat_obj
         obj.sprites = sprite_obj
-
         obj.save()
 
-        if form.data['ty_name'] != '':
-            try:
-                Type.objects.create(ty_name=form.data['ty_name'])
-            except:
-                pass
-            obj.types.add(Type.objects.filter(ty_name=form.data['ty_name']))
-            obj.save()
-
-        if form.data['ab_name'] != '':
-            try:
-                Ability.objects.create(ab_name=form.data['ab_name'])
-            except:
-                pass
-            obj.abilities.add(Ability.objects.filter(ab_name=form.data['ab_name']))
-            obj.save()
+        obj.types.add(type_obj)
+        obj.abilities.add(ability_obj)
+        obj.save()
 
         # for type in form.data['types']:
         #     obj.types.add(type)

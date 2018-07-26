@@ -1,30 +1,33 @@
 {% extends 'main.html' %}
 {% load bootstrap4 %}
 {% block title %} Покемон {% endblock %}
-
 {% block page %}
-<div class="container">
-    <br/>
- <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-
-     <div class="row justify-content-center">
-
-        <div class="col-4">
-      {% bootstrap_form form %}
-
-    </div>
-    <div class="col-4">
-      {% bootstrap_form form2 %}
-      {% bootstrap_form form3 %}
-
-    </div>
-        <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-outline-success">Обновить</button>
-                <a href="{% url 'details' pokemon.id %}" class="btn btn-outline-danger">Отмена</a>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container">
+        <br/>
+        <div class="row justify-content-center">
+            <div class="col-3">
+                <div class="row justify-content-center">Описание</div>
+                {% bootstrap_form form %}
             </div>
-  </div>
-        </form>
-</div>
-<br/>
+            <div class="col-3">
+                <div class="row justify-content-center">Характеристики</div>
+                {% bootstrap_form form2 %}
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <button type="submit" class="btn btn-outline-success">Обновить</button>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'details' pokemon.id %}" class="btn btn-outline-danger">Отмена</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row justify-content-center">Спрайты</div>
+                {% bootstrap_form form3 %}
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}

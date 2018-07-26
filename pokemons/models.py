@@ -20,7 +20,7 @@ class Type(models.Model):
     ty_name = models.CharField(max_length=20, verbose_name="Тип покемона", unique=True)
 
     def __str__(self):
-        return self.name
+        return self.ty_name
 
     class Meta:
         verbose_name = "Тип"
@@ -48,7 +48,7 @@ class Ability(models.Model):
     ab_name = models.CharField(max_length=20, verbose_name="Способность покемона", unique=True)
 
     def __str__(self):
-        return self.name.__str__()
+        return self.ab_name.__str__()
 
     class Meta:
         verbose_name = "Способность"
