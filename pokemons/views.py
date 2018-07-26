@@ -122,7 +122,15 @@ class EditPokemon(generic.UpdateView):
             front_default=form.data['front_default'],
             front_shiny=form.data['front_shiny'])
 
+        obj.abilities.clear()
+        obj.types.clear()
         obj.save()
+        for type in form.fields['types'].queryset:
+            obj.types.add(type)
+            obj.save()
+        for ability in form.fields['abilities'].queryset:
+            obj.abilities.add(ability)
+            obj.save()
         return redirect(reverse_lazy('desktop'))
 
 
