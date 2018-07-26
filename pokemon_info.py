@@ -45,6 +45,7 @@ class PokemonInfo:
             return pb.gender(self.pokemon.id).name
         except:
             return 'unknown'
+
     def get_weight(self):
         return self.pokemon.weight
 
@@ -60,7 +61,7 @@ class PokemonInfo:
     def get_stats(self):
         pok_stats = {}
         for stat in self.pokemon.stats:
-            name = stat.stat.name.replace('-','_')
+            name = stat.stat.name.replace('-', '_')
             pok_stats[name] = stat.base_stat
         return pok_stats
 
@@ -77,4 +78,3 @@ class PokemonInfo:
         self.dictionary['pok_eggs'] = self.get_eggs()
         self.dictionary['pok_stats'] = self.get_stats()
         self.dictionary['pok_sprites'] = self.get_sprites()
-       

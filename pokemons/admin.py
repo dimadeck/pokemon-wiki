@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 import pokemons.models as pokemons
 
 admin.site.register(pokemons.Pokemon)

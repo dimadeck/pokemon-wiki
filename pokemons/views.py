@@ -1,14 +1,13 @@
-from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
+
+from pokemon_info import PokemonInfo
 from pokemons.forms import StatisticForm, SpriteForm, AbilityForm, TypeForm
 from pokemons.functions import set_dict
-from pokemon_info import PokemonInfo
+from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
 
 PAGINATION_PAGES = 5
 
@@ -170,7 +169,7 @@ class SearchView(generic.ListView):
 
 
 class PokemonAddFromAPI(generic.RedirectView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
             pok = PokemonInfo(kwargs['pk'])
             pok.collect_info()
@@ -181,7 +180,8 @@ class PokemonAddFromAPI(generic.RedirectView):
             sprite_obj = Sprites.objects.create(**set_dict(pd['pok_sprites'], SpriteForm.Meta.fields))
             sprite_obj.save()
 
-            other_fields = ('pok_name', 'pok_weight', 'pok_height', 'pok_color', 'pok_generation', 'pok_eggs', 'pok_gender')
+            other_fields = (
+                'pok_name', 'pok_weight', 'pok_height', 'pok_color', 'pok_generation', 'pok_eggs', 'pok_gender')
             fields = ('name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender')
             obj = Pokemon.objects.create(stats=stat_obj, sprites=sprite_obj, **set_dict(pd, fields, other_fields))
             obj.stats = stat_obj
