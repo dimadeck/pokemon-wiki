@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from pokemons.models import Pokemon, Statistic, Sprites, Type, Ability
 from pokemons.forms import StatisticForm, SpriteForm, AbilityForm, TypeForm
+from pokemons.functions import set_dict
 
 
 class Desktop(generic.ListView):
@@ -51,24 +52,10 @@ class NewPokemon(generic.CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        stat_obj = Statistic.objects.create(
-            speed=form.data['speed'],
-            attack=form.data['attack'],
-            special_attack=form.data['special_attack'],
-            defense=form.data['defense'],
-            special_defense=form.data['special_defense'],
-            hp=form.data['hp'])
+        stat_obj = Statistic.objects.create(**set_dict(form.data, StatisticForm.Meta.fields))
         stat_obj.save()
 
-        sprite_obj = Sprites.objects.create(
-            back_female=form.data['back_female'],
-            back_shiny_female=form.data['back_shiny_female'],
-            back_default=form.data['back_default'],
-            back_shiny=form.data['back_shiny'],
-            front_female=form.data['front_female'],
-            front_shiny_female=form.data['front_shiny_female'],
-            front_default=form.data['front_default'],
-            front_shiny=form.data['front_shiny'])
+        sprite_obj = Sprites.objects.create(**set_dict(form.data, SpriteForm.Meta.fields))
         sprite_obj.save()
 
         type_obj, created = Type.objects.get_or_create(ty_name=form.data['ty_name'])
@@ -105,26 +92,14 @@ class EditPokemon(generic.UpdateView):
         obj = form.save(commit=False)
 
         Statistic.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
-            speed=form.data['speed'],
-            attack=form.data['attack'],
-            special_attack=form.data['special_attack'],
-            defense=form.data['defense'],
-            special_defense=form.data['special_defense'],
-            hp=form.data['hp'])
-
+            **set_dict(form.data, StatisticForm.Meta.fields))
         Sprites.objects.select_for_update().filter(pk=self.kwargs['pk']).update(
-            back_female=form.data['back_female'],
-            back_shiny_female=form.data['back_shiny_female'],
-            back_default=form.data['back_default'],
-            back_shiny=form.data['back_shiny'],
-            front_female=form.data['front_female'],
-            front_shiny_female=form.data['front_shiny_female'],
-            front_default=form.data['front_default'],
-            front_shiny=form.data['front_shiny'])
+            **set_dict(form.data, SpriteForm.Meta.fields))
 
         obj.abilities.clear()
         obj.types.clear()
         obj.save()
+
         for type in form.fields['types'].queryset:
             obj.types.add(type)
             obj.save()
