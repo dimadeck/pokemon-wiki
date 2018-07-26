@@ -170,7 +170,7 @@ class SearchView(generic.ListView):
 
 
 class PokemonAddFromAPI(generic.RedirectView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
             pok = PokemonInfo(kwargs['pk'])
             pok.collect_info()
@@ -198,5 +198,6 @@ class PokemonAddFromAPI(generic.RedirectView):
                 obj.abilities.add(ability_obj)
                 obj.save()
         except:
-            raise PermissionDenied
+            # raise PermissionDenied
+            pass
         return redirect(reverse_lazy('desktop'))
