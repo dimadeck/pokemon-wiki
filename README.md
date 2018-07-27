@@ -30,13 +30,19 @@ Killer Feature:
 git clone https://github.com/dimadeck/pokemon-wiki
 
 Создание, активация и настройка виртуального окружения:
+
 python -m venv env
+
 source env/bin/activate
+
 pip install -r requirements.txt
 
 Настройка БД:
+
 python manage.py makemigrations
+
 python manage.py migrate
+
 python manage.py runserver
 
 Суперпользователя создавать необязательно.
