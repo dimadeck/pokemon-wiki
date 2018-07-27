@@ -4,13 +4,80 @@
 <div class="container">
     <br/>
     <div class="d-flex justify-content-between">
-        <div>
-        </div>
         <a href="{% url 'desktop' %}" class="btn btn-outline-success">Рабочий стол</a>
     </div>
-    <h4 class="d-flex justify-content-center"> Покемон {{ pokemon.name }} </h4>
-    <br/>
-
+    <div class="d-flex justify-content-center">
+        <br/>
+        <div class="card card-inverse" style="width: 21rem; background-color:#B5B0B0">
+            <img class="card-img-top" src="../static/card.jpg">
+            <div class="card-block card-img-overlay">
+                <h4 class="card-title">{{ pokemon.name }} </h4>
+                <div style="height:4rem"></div>
+                {%with 40 as w_h%}
+                <div>
+                    <div>
+                        <div class="d-flex justify-content-between">
+                            <img src="../static/images/type.png" width={{w_h}} height={{w_h}}>
+                            {% for type in pokemon.types.all %}
+                            {{ type }}
+                            {% endfor %}
+                            <img src="../static/images/abilities.png" width={{w_h}} height={{w_h}}>
+                            <div class="d-flex justify-content-center">
+                                {% for ability in pokemon.abilities.all %}
+                                {{ ability }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            {% for sprite in pokemon.sprites.get_list %}
+                            {% if not sprite is None %}
+                            <a href="{{ sprite }}"><img src="{{ sprite }}" width="65" height="65"></a>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <img src="../static/images/weight.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.weight}}
+                            <img src="../static/images/height.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.height}}
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <img src="../static/images/generation.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.generation }}
+                            <img src="../static/images/gender.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.gender}}
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <img src="../static/images/egg.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.eggs }}
+                            <img src="../static/images/color.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.color }}
+                        </div>
+                        <div class="d-flex justify-content-center row">
+                            <img src="../static/images/speed.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.stats.speed }}
+                            <img src="../static/images/attack.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.stats.attack }}
+                            <img src="../static/images/special-attack.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.stats.special_attack }}
+                            <img src="../static/images/defense.png" width={{w_h}} height={{w_h}}>
+                            {{pokemon.stats.defense }}
+                            <img src="../static/images/special-defense.jpg" width={{w_h}} height={{w_h}}>
+                            {{pokemon.stats.special_defense }}
+                            <img src="../static/images/hp.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.stats.hp }}
+                            <img src="../static/images/stats.png" width={{w_h}} height={{w_h}}>
+                            {{ pokemon.stats }}
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
 
 </div>
 

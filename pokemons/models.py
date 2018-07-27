@@ -15,6 +15,10 @@ class Sprites(models.Model):
         verbose_name = "Спрайты"
         verbose_name_plural = "Спрайты"
 
+    def get_list(self):
+        return (self.back_default, self.back_female, self.back_shiny, self.back_shiny_female, self.front_default,
+                self.front_female, self.front_shiny, self.front_shiny_female)
+
 
 class Type(models.Model):
     ty_name = models.CharField(max_length=20, verbose_name="Тип покемона", unique=True)
