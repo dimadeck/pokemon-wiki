@@ -168,36 +168,41 @@ class SearchView(generic.ListView):
         return context
 
 
-class PokemonAddFromAPI(generic.RedirectView):
-    def get(self, request, *args, **kwargs):
-        try:
-            pok = PokemonInfo(kwargs['pk'])
-            pok.collect_info()
-            pd = pok.dictionary
-            stat_obj = Statistic.objects.create(**set_dict(pd['pok_stats'], StatisticForm.Meta.fields))
-            stat_obj.save()
+# class PokemonAddFromAPI(generic.RedirectView):
 
-            sprite_obj = Sprites.objects.create(**set_dict(pd['pok_sprites'], SpriteForm.Meta.fields))
-            sprite_obj.save()
 
-            other_fields = (
-                'pok_name', 'pok_weight', 'pok_height', 'pok_color', 'pok_generation', 'pok_eggs', 'pok_gender')
-            fields = ('name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender')
-            obj = Pokemon.objects.create(stats=stat_obj, sprites=sprite_obj, **set_dict(pd, fields, other_fields))
-            obj.stats = stat_obj
-            obj.sprites = sprite_obj
+class Add(generic.TemplateView):
+    template_name = "add.html"
+
+    def post(self, request, *args, **kwargs):
+        # try:
+        pok = PokemonInfo(request.POST['add'])
+        pok.collect_info()
+        pd = pok.dictionary
+        stat_obj = Statistic.objects.create(**set_dict(pd['pok_stats'], StatisticForm.Meta.fields))
+        stat_obj.save()
+
+        sprite_obj = Sprites.objects.create(**set_dict(pd['pok_sprites'], SpriteForm.Meta.fields))
+        sprite_obj.save()
+
+        other_fields = (
+            'pok_name', 'pok_weight', 'pok_height', 'pok_color', 'pok_generation', 'pok_eggs', 'pok_gender')
+        fields = ('name', 'weight', 'height', 'color', 'generation', 'eggs', 'gender')
+        obj = Pokemon.objects.create(stats=stat_obj, sprites=sprite_obj, **set_dict(pd, fields, other_fields))
+        obj.stats = stat_obj
+        obj.sprites = sprite_obj
+        obj.save()
+
+        for type in pd['pok_types']:
+            type_obj, created = Type.objects.get_or_create(ty_name=type)
+            obj.types.add(type_obj)
             obj.save()
 
-            for type in pd['pok_types']:
-                type_obj, created = Type.objects.get_or_create(ty_name=type)
-                obj.types.add(type_obj)
-                obj.save()
-
-            for ability in pd['pok_abilities']:
-                ability_obj, created = Ability.objects.get_or_create(ab_name=ability)
-                obj.abilities.add(ability_obj)
-                obj.save()
-        except:
-            # raise PermissionDenied
-            pass
+        for ability in pd['pok_abilities']:
+            ability_obj, created = Ability.objects.get_or_create(ab_name=ability)
+            obj.abilities.add(ability_obj)
+            obj.save()
+        # except:
+        # raise PermissionDenied
+        # pass
         return redirect(reverse_lazy('desktop'))

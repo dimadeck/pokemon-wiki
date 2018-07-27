@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block title %} Добавление покемона {% endblock %}
+{% block page %}
+<div class="container">
+    <br/>
+    Введите номер покемона из https://pokeapi.co/, для того чтобы добавить в приложение
+    <div class="d-flex justify-content-center">
+        <form method="post">
+            {% csrf_token %}
+            <input name="add" type="text">
+            <input class="btn btn-outline-info" type="submit" value="Добавить"/>
+            <a href="{% url 'desktop' %}" class="btn btn-outline-success">Отмена</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

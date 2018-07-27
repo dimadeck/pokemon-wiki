@@ -38,7 +38,10 @@ class PokemonInfo:
         return pok_sprites
 
     def get_generations(self):
-        return pb.generation(self.pokemon.id).name
+        try:
+            return pb.generation(self.pokemon.id).name
+        except:
+            return 'unknown'
 
     def get_gender(self):
         try:
@@ -53,10 +56,16 @@ class PokemonInfo:
         return self.pokemon.height
 
     def get_color(self):
-        return pb.pokemon_color(self.pokemon.id).name
+        try:
+            return pb.pokemon_color(self.pokemon.id).name
+        except:
+            return 'unknown'
 
     def get_eggs(self):
-        return pb.egg_group(self.pokemon.id).name
+        try:
+            return pb.egg_group(self.pokemon.id).name
+        except:
+            return 'unknown'
 
     def get_stats(self):
         pok_stats = {}
